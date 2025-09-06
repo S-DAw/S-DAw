@@ -1,0 +1,29 @@
+name: Generate Pac-Man Commits
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # run daily
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Pac-Man Generator
+        run: python pacman_generator.py
+
+      - name: Commit and Push
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "update pacman.svg"
+          add: "pacman.svg"
