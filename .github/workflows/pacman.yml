@@ -24,7 +24,8 @@ jobs:
         run: pip install requests
 
       - name: Generate Pac-Man SVG
-        run: python pacman_generator.py
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} python pacman_generator.py
+
 
       - name: Commit and push
         run: |
