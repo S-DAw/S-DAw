@@ -37,8 +37,14 @@ for step in range(GRID_W*GRID_H):
     mouth_angle = 40 if step % 2 == 0 else 10  # chomping effect
 
     pacman = f'''
-      <circle cx="{x}" cy="{y}" r="5" fill="yellow" />
-      <path d="M{x},{y} L{x+6},{y-3} A6,6 0 1,1 {x+6},{y+3} Z" fill="black" transform="rotate({mouth_angle},{x},{y})"/>
+      <circle cx="10" cy="10" r="5" fill="yellow">
+  <animateTransform attributeName="transform"
+                    type="translate"
+                    from="0 0" to="200 0"
+                    dur="5s"
+                    repeatCount="indefinite"/>
+</circle>
+
     '''
     frames.append(f'<g visibility="{"visible" if step==0 else "hidden"}">{pacman}</g>')
 
