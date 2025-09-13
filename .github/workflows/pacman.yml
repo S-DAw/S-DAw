@@ -36,9 +36,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan output
-          git reset
-          cp dist/* .
+          git fetch origin
+          git checkout output || git checkout --orphan output
+          git reset --hard
+          cp dist/pacman-contribution-graph-dark.svg .
           git add pacman-contribution-graph-dark.svg
-          git commit -m "update pacman contribution graph"
-          git push -f origin output
+          git commit -m "update pacman contribution graph" || echo "No changes"
+          git push origin output --force
