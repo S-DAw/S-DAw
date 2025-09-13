@@ -1,14 +1,12 @@
-name: Atualizar Pac-Man Contribution 
+name: Update Pac-Man Contribution Graph
 
 on:
-  schedule: # execute every 12 hours
-    - cron: "* */12 * * *"
-
-  workflow_dispatch:
-
+  schedule:       # run automatically every 12 hours
+    - cron: "0 */12 * * *"
+  workflow_dispatch:   # allow manual trigger
   push:
     branches:
-    - main
+      - main
 
 jobs:
   build:
@@ -18,21 +16,22 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Criar diretório dist
+      - name: Create dist directory
         run: mkdir -p dist
 
-      - name: Gerar gráfico de contribuições estilo Pac-Man
+      - name: Generate Pac-Man graph
         uses: AndreRuperto/svg-pacman-contributions@main
         with:
-          github_user_name: ${{ github.repository_owner }}
+          github_user_name: S-DAw   # 👈 force your username
           github_token: ${{ secrets.GITHUB_TOKEN }}
           theme: github-dark
           output_directory: dist
           player_style: conservador
 
-      - name: Publicar SVG na branch output
+      - name: Publish SVGs to output branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: output
