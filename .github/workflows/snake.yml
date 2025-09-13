@@ -27,13 +27,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Modify Snake and Contributions Colors
+      - name: Ensure Permissions and Modify Snake and Contribution Colors
         run: |
-          # Replace snake body color with red
+          # Give write permissions to dist directory and files
+          chmod -R 777 dist
+
+          # Change snake color to red and contributions color to blue in both files
           sed -i 's/#4c1f00/#ff0000/g' dist/github-contribution-grid-snake.svg
           sed -i 's/#4c1f00/#ff0000/g' dist/github-contribution-grid-snake-dark.svg
 
-          # Replace contributions color with blue
           sed -i 's/#196127/#0000ff/g' dist/github-contribution-grid-snake.svg
           sed -i 's/#196127/#0000ff/g' dist/github-contribution-grid-snake-dark.svg
 
