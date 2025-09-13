@@ -22,14 +22,13 @@ jobs:
       - name: Create dist directory
         run: mkdir -p dist
 
-      - name: Generate Pac-Man graph
+      - name: Generate Pac-Man graph (dark theme only)
         uses: AndreRuperto/svg-pacman-contributions@main
         with:
           github_user_name: S-DAw   # 👈 force your username
           github_token: ${{ secrets.GITHUB_TOKEN }}
           theme: github-dark
           output_directory: dist
-          player_style: conservador
 
       - name: Publish SVGs to output branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
