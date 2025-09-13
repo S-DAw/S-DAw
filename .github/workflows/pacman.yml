@@ -1,35 +1,38 @@
-name: Generate Pacman
+name: Atualizar Pac-Man Contribution 
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # runs daily at midnight UTC
-  workflow_dispatch:     # allows manual trigger
+  schedule: # execute every 12 hours
+    - cron: "* */12 * * *"
+
+  workflow_dispatch:
+
   push:
     branches:
-      - main
-permissions:
-  contents: write   # <-- gives the bot permission to push
+    - main
 
 jobs:
-  generate:
+  build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Generate Pacman
-        uses: Platane/snk@v3
+      - name: Criar diretório dist
+        run: mkdir -p dist
+
+      - name: Gerar gráfico de contribuições estilo Pac-Man
+        uses: AndreRuperto/svg-pacman-contributions@main
         with:
           github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/pacman-contribution-graph.svg
-            dist/pacman-contribution-graph-dark.svg?palette=github-dark
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          theme: github-dark
+          output_directory: dist
+          player_style: conservador
 
-      - name: Push to output branch
+      - name: Publicar SVG na branch output
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: output
