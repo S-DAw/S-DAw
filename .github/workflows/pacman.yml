@@ -1,19 +1,18 @@
 name: Update Pac-Man Contribution Graph
 
 on:
-  schedule:       # run automatically every 12 hours
-    - cron: "0 */12 * * *"
-  workflow_dispatch:   # allow manual trigger
+  schedule:
+    - cron: "0 */12 * * *"   # run every 12 hours
+  workflow_dispatch:          # allow manual run
   push:
     branches:
       - main
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
 
     steps:
       - name: Checkout repository
@@ -25,15 +24,21 @@ jobs:
       - name: Generate Pac-Man graph (dark theme only)
         uses: AndreRuperto/svg-pacman-contributions@main
         with:
-          github_user_name: S-DAw   # 👈 force your username
+          github_user_name: S-DAw
           github_token: ${{ secrets.GITHUB_TOKEN }}
           theme: github-dark
           output_directory: dist
 
-      - name: Publish SVGs to output branch
-        uses: crazy-max/ghaction-github-pages@v3.1.0
-        with:
-          target_branch: output
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify output
+        run: ls -l dist
+
+      - name: Push SVG to output branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan output
+          git reset
+          cp dist/* .
+          git add pacman-contribution-graph-dark.svg
+          git commit -m "update pacman contribution graph"
+          git push -f origin output
