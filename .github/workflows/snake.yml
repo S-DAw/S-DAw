@@ -27,6 +27,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Modify Snake and Contributions Colors
+        run: |
+          # Replace snake body color with red
+          sed -i 's/#4c1f00/#ff0000/g' dist/github-contribution-grid-snake.svg
+          sed -i 's/#4c1f00/#ff0000/g' dist/github-contribution-grid-snake-dark.svg
+
+          # Replace contributions color with blue
+          sed -i 's/#196127/#0000ff/g' dist/github-contribution-grid-snake.svg
+          sed -i 's/#196127/#0000ff/g' dist/github-contribution-grid-snake-dark.svg
+
       - name: Push to output branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
